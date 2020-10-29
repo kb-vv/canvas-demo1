@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>画板</title>
+    <link rel="stylesheet" href="reset.css" />
+  </head>
+  <body>
+    <!-- 设置宽高没什么卵用，会被CSS覆盖掉 -->
+    <canvas id="canvas" width="100" height="100"></canvas>
+    <script>
+      let canvas = document.getElementById("canvas"); //获取canvas
+      canvas.width = document.documentElement.clientWidth; //获取文档的宽度
+      canvas.height = document.documentElement.clientHeight; //获取文档的高度
+      let ctx = canvas.getContext("2d");
+      let painting = false;
+      let last; //定义上一个点，可以让两个点连接
+
+      ctx.fillStyle = "black"; //填充样式
+      ctx.strokeStyle = "none"; //边框样式
+      ctx.lineWidth = 8; //线的宽度
+      ctx.lineCap = "round"; //细节，可以让转折点变得圆滑
+      var isTouchDevice = "ontouchstart" in document.documentElement;
+      console.log(isTouchDevice);
+
+      //检测在手机上行不行
+      if (isTouchDevice) {
+        canvas.ontouchstart = (e) => {
+          let x = e.touches[0].clientX;
+          let y = e.touches[0].clientY;
+          last = [x, y];
+        };
+        canvas.ontouchmove = (e) => {
+          let x = e.touches[0].clientX;
+          let y = e.touches[0].clientY;
+          drawLine(last[0], last[1], x, y);
+          last = [x, y];
+        };
+      } else {
+        canvas.onmousedown = (e) => {
+          last = [e.clientX, e.clientY]; //鼠标放下去为第一个点，是一个数组
+          painting = true;
+        };
+        canvas.onmouseup = () => {
+          painting = false;
+        };
+        canvas.onmousemove = (e) => {
+          if (painting === true) {
+            drawLine(last[0], last[1], e.clientX, e.clientY); //鼠标放下去的那个点作为第一个点
+            last = [e.clientX, e.clientY]; //每次更新上一个点的坐标
+          }
+        };
+      }
+      function drawLine(x1, y1, x2, y2) {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.stroke();
+      }
+    </script>
+  </body>
+</html>
