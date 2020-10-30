@@ -4,10 +4,12 @@
   box-sizing: border-box;
 }
 html,
-body {
+/* body {
   overflow: hidden;
   height: 100%;
-}
+} */
 #canvas {
   display: block;
+  width: 100vw;
+  height: 100vh;
 }
