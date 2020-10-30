@@ -31,6 +31,13 @@
           let y = e.touches[0].clientY;
           last = [x, y];
         };
+        var mo = function (e) {
+          e.preventDefault();
+        };
+        function stop() {
+          document.body.style.overflow = "hidden";
+          document.addEventListener("touchmove", mo, false); //禁止页面滑动
+        }
         canvas.ontouchmove = (e) => {
           let x = e.touches[0].clientX;
           let y = e.touches[0].clientY;
