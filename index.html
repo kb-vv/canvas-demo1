@@ -7,22 +7,19 @@
     <link rel="stylesheet" href="reset.css" />
   </head>
   <body>
-    <!-- 设置宽高没什么卵用，会被CSS覆盖掉 -->
     <canvas id="canvas" width="100" height="100"></canvas>
     <script>
-      let canvas = document.getElementById("canvas"); //获取canvas
-      canvas.width = document.documentElement.clientWidth; //获取文档的宽度
-      canvas.height = document.documentElement.clientHeight; //获取文档的高度，不可以用body，因为body的clientHeight是由内容撑高的
+      let canvas = document.getElementById("canvas");
+      canvas.width = document.documentElement.clientWidth;
+      canvas.height = document.documentElement.clientHeight;
       let ctx = canvas.getContext("2d");
-      let painting = false; //相当于一个信号灯，false就不画，true就画
-      let last; //定义上一个点，可以让两个点连接
-      ctx.fillStyle = "black"; //填充样式，颜色
-      ctx.strokeStyle = "none"; //边框样式
-      ctx.lineWidth = 8; //线的宽度
-      ctx.lineCap = "round"; //细节，可以让转折点变得圆滑
-      var isTouchDevice = "ontouchstart" in document.documentElement; //检测在手机上行不行
-      console.log(isTouchDevice);
-      //ctx.fillRect(e.clientX-5,e.clientY-5,10,10)
+      let painting = false;
+      let last;
+      ctx.fillStyle = "black";
+      ctx.strokeStyle = "none";
+      ctx.lineWidth = 8;
+      ctx.lineCap = "round";
+      var isTouchDevice = "ontouchstart" in document.documentElement;
       if (isTouchDevice) {
         canvas.ontouchstart = (e) => {
           let x = e.touches[0].clientX;
@@ -37,7 +34,7 @@
         };
       } else {
         canvas.onmousedown = (e) => {
-          last = [e.clientX, e.clientY]; //鼠标放下去为第一个点，是一个数组
+          last = [e.clientX, e.clientY];
           painting = true;
         };
         canvas.onmouseup = () => {
@@ -45,8 +42,8 @@
         };
         canvas.onmousemove = (e) => {
           if (painting === true) {
-            drawLine(last[0], last[1], e.clientX, e.clientY); //鼠标放下去的那个点作为第一个点
-            last = [e.clientX, e.clientY]; //实时更新上一个点的坐标
+            drawLine(last[0], last[1], e.clientX, e.clientY);
+            last = [e.clientX, e.clientY];
           }
         };
       }
@@ -56,7 +53,7 @@
         ctx.lineTo(x2, y2);
         ctx.stroke();
       }
-      //禁止页面滚动
+
       document.body.addEventListener(
         "touchmove",
         function (e) {
